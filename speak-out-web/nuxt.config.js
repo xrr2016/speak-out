@@ -1,4 +1,4 @@
-import pkg from './package';
+import pkg from './package'
 
 export default {
   mode: 'universal',
@@ -32,7 +32,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/axios'],
 
   /*
    ** Nuxt.js modules
@@ -48,12 +48,12 @@ export default {
    ** Axios module configuration
    */
   axios: {
-    proxy: true
+    // proxy: true
     // See https://github.com/nuxt-community/axios-module#options
   },
-   proxy: {
-    // '/api/': 'http://api.example.com',
-  }
+  // proxy: {
+  //   '/user': 'http://localhost:6666/user'
+  // },
   /*
    ** Build configuration
    */

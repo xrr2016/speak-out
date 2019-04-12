@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
@@ -21,5 +22,9 @@ const userSchema = mongoose.Schema({
     default: 0
   }
 })
+
+userSchema.methods.comparePassword = function(password) {
+  return bcrypt.compareSync(password, this.password)
+}
 
 module.exports = mongoose.model('User', userSchema)

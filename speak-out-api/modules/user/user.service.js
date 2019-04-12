@@ -6,6 +6,8 @@
 //  delete
 //  register
 //  login
+//  verify
+//  exit
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -51,6 +53,8 @@ async function remove(id = '') {
     return { message: '删除失败' }
   }
 }
+
+async function isUserExist() {}
 
 async function register(email = '', username = '', password = '') {
   const user = await User.findOne({ email }).exec()
