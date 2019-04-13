@@ -17,8 +17,13 @@ body::-webkit-scrollbar {
   min-height: 212px;
 }
 
+.section {
+  min-height: calc(100vh - 3.25rem);
+}
+
 .main-content {
   position: relative;
+  width: 100%;
   max-width: 640px;
   margin: 0 auto;
 }

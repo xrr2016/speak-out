@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <b-tabs class="block form-tabs" v-model="tabIndex">
+    <b-tabs class="block main-content" v-model="tabIndex">
       <b-tab-item label="登陆">
         <form @submit.prevent="handleLogin">
           <b-field>

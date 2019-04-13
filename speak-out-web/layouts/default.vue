@@ -1,8 +1,9 @@
 <template>
   <main>
     <nav class="navbar header has-shadow is-primary" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <nuxt-link class="logo navbar-item" to="/">speak out</nuxt-link>
+      <div class="main-content">
+        <nuxt-link class="logo button is-primary" to="/">speak out</nuxt-link>
+        <nuxt-link class="button is-primary" to="user">登陆</nuxt-link>
       </div>
     </nav>
     <nuxt/>
@@ -18,15 +19,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notification {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  z-index: 1;
-  transform: translateX(-50%);
-}
-.logo {
-  text-transform: uppercase;
+.main-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 3.25rem;
+  .button {
+    height: 3.25rem;
+  }
+  .logo {
+    text-transform: uppercase;
+
+    @media screen and (min-width: 652px) {
+      transform: translateX(-12px);
+    }
+  }
 }
 </style>
 
