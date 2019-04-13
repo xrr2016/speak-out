@@ -48,12 +48,15 @@ export default {
    ** Axios module configuration
    */
   axios: {
-    // proxy: true
+    proxy: true
     // See https://github.com/nuxt-community/axios-module#options
   },
-  // proxy: {
-  //   '/user': 'http://localhost:6666/user'
-  // },
+  proxy: {
+    '/api/': {
+      changeOrigin: true,
+      target: 'http://localhost:6666'
+    }
+  },
   /*
    ** Build configuration
    */

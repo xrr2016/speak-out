@@ -100,11 +100,14 @@ async function login(username = '', email = '', password = '') {
 
   return {
     success: true,
-    id: user._id,
-    level: user.level,
-    email: user.email,
-    username: user.username,
-    token
+    message: '登陆成功',
+    token,
+    user: {
+      id: user._id,
+      level: user.level,
+      email: user.email,
+      username: user.username
+    }
   }
 }
 

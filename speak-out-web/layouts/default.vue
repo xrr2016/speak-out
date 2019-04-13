@@ -2,7 +2,7 @@
   <main>
     <nav class="navbar header has-shadow is-primary" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="logo navbar-item" href="/">speak out</a>
+        <nuxt-link class="logo navbar-item" to="/">speak out</nuxt-link>
       </div>
     </nav>
     <nuxt/>
@@ -18,6 +18,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.notification {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+}
 .logo {
   text-transform: uppercase;
 }

@@ -1,10 +1,10 @@
 <template>
   <section class="section">
-    <b-tabs class="block form-tabs">
+    <b-tabs class="block form-tabs" v-model="tabIndex">
       <b-tab-item label="登陆">
-        <form @submit.prevent="handleSubmit">
+        <form @submit.prevent="handleLogin">
           <b-field>
-            <b-input v-model="loginForm.username" placeholder="输入用户名"></b-input>
+            <b-input v-model="loginForm.email" required type="email" placeholder="输入邮箱地址"></b-input>
           </b-field>
 
           <b-field>
@@ -13,6 +13,7 @@
               type="password"
               placeholder="输入密码"
               password-reveal
+              required
             ></b-input>
           </b-field>
 
@@ -35,10 +36,10 @@
           <b-field>
             <b-input
               v-model="signupForm.password"
-              required
               type="password"
               placeholder="输入密码"
               password-reveal
+              required
             ></b-input>
           </b-field>
 
@@ -57,23 +58,16 @@
 </template>
 
 <script>
-import * as md5 from 'blueimp-md5'
+import { mapMutations } from 'vuex'
 
 export default {
-  layout: 'empty',
-  mounted() {
-    // this.$axios
-    //   .get('http://localhost:6666/user')
-    //   .then(result => {
-    //     console.log('result :', result)
-    //   })
-    //   .catch(err => {})
-  },
+  name: 'UserPage',
   data() {
     return {
+      tabIndex: 0,
       isSubmiting: false,
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       signupForm: {
@@ -84,29 +78,98 @@ export default {
   },
   computed: {
     isCanLogin() {
-      return true
+      const { email, password } = this.loginForm
+      return email.length > 0 && password.length > 0
     },
     isCanSignup() {
-      const { email, username, password } = this.signupForm
-      return email.length > 0 && username.length > 0 && password.length > 0
+      const { email, password } = this.signupForm
+      return email.length > 0 && password.length > 0
     }
   },
   methods: {
-    handleSignup() {
-      const { email, username, password } = this.signupForm
-      const hash = md5(password)
-      console.log(email, username, password, hash)
-    },
-    handleSubmit(event) {
+    ...mapMutations({
+      SET_AUTH_USER: 'SET_AUTH_USER',
+      SET_ACCESS_TOKEN: 'SET_ACCESS_TOKEN'
+    }),
+    handleLogin(event) {
+      const { email, password } = this.loginForm
+
+      if (!email || !password) {
+        return
+      }
+
       this.isSubmiting = true
 
-      setTimeout(() => {
-        this.isSubmiting = false
-        this.$toast.open({
-          message: '登陆失败',
-          type: 'is-success'
+      this.$axios
+        .post('/api/user/login', {
+          email,
+          password
         })
-      }, 2000)
+        .then(res => {
+          const result = res.data
+          if (result.success) {
+            this.SET_AUTH_USER(result.user)
+            this.SET_ACCESS_TOKEN(result.token)
+            this.$axios.setToken(result.token, 'Bearer')
+            this.$router.push('/')
+          } else {
+            this.$toast.open({
+              message: result.message,
+              type: 'is-danger'
+            })
+          }
+        })
+        .catch(error => {
+          const data = error.response.data
+          this.$toast.open({
+            message: data.message,
+            type: 'is-danger'
+          })
+        })
+        .finally(() => {
+          this.isSubmiting = false
+        })
+    },
+    handleSignup() {
+      const { email, password } = this.signupForm
+
+      if (!email || !password) {
+        return
+      }
+
+      this.isSubmiting = true
+
+      this.$axios
+        .post('/api/user/register', {
+          email,
+          password
+        })
+        .then(res => res.data)
+        .then(result => {
+          if (result.success) {
+            this.$toast.open({
+              message: '注册成功，请登陆',
+              type: 'is-success'
+            })
+            // this.SET_AUTH_USER(result.user)
+            this.tabIndex = 0
+          } else {
+            this.$toast.open({
+              message: result.message,
+              type: 'is-danger'
+            })
+          }
+        })
+        .catch(error => {
+          const data = error.response.data
+          this.$toast.open({
+            message: data.message,
+            type: 'is-danger'
+          })
+        })
+        .finally(() => {
+          this.isSubmiting = false
+        })
     }
   }
 }

@@ -1,6 +1,9 @@
 <template>
   <section class="section">
-    <h1>Home Page</h1>
+    <div class="main-content">
+      <h1>Home Page</h1>
+      <nuxt-link to="user">User Page</nuxt-link>
+    </div>
   </section>
 </template>
 
