@@ -1,29 +1,24 @@
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// const postSchema = mongoose.Schema({
-//   title: {
-//     type: String,
-//     required: true
-//   },
-//   content: {
-// 	type: String,
-// 	default: ''
-//   },
-//   author: {
+const postSchema = Schema({
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    require: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    default: ''
+  },
+  vote: {
+    type: Number,
+    default: 0
+  }
+})
 
-//   }
-// })
-
-// userSchema.methods.comparePassword = function(password) {
-//   return bcrypt.compareSync(password, this.password)
-// }
-
-// userSchema.methods.generateToken = function() {
-//   return jwt.sign(
-//     { id: this._id, email: this.email, username: this.username },
-//     JWT_SECRET,
-//     { expiresIn: TWO_HOURS }
-//   )
-// }
-
-// module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('Post', postSchema)
