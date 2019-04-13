@@ -12,13 +12,14 @@ body::-webkit-scrollbar {
   opacity: 0;
 }
 
+.section {
+  padding-top: 1rem;
+  min-height: calc(100vh - 3.25rem);
+}
+
 .b-tabs .tab-content {
   padding: 1rem 0;
   min-height: 212px;
-}
-
-.section {
-  min-height: calc(100vh - 3.25rem);
 }
 
 .main-content {

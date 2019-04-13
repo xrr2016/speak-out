@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/pagination', async (req, res) => {
-  const { page, size } = req.query
+  const { page = 0, size = 10 } = req.query
   const posts = await postService.pagination(parseInt(page), parseInt(size))
 
   return res.status(200).json(posts)
