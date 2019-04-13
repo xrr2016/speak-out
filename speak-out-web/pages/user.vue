@@ -33,10 +33,6 @@
           </b-field>
 
           <b-field>
-            <b-input v-model="signupForm.username" required placeholder="输入用户名"></b-input>
-          </b-field>
-
-          <b-field>
             <b-input
               v-model="signupForm.password"
               required
@@ -82,7 +78,6 @@ export default {
       },
       signupForm: {
         email: '',
-        username: '',
         password: ''
       }
     }
