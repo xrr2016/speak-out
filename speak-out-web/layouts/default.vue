@@ -7,7 +7,21 @@
     >
       <div class="main-content">
         <nuxt-link class="logo button is-primary" to="/">speak out</nuxt-link>
-        <nuxt-link class="button is-primary" to="user">登陆</nuxt-link>
+
+        <template v-if="authUser !== null">
+          <b-dropdown aria-role="list">
+            <button class="button is-primary" slot="trigger">
+              <figure class="image is-24x24 avatar">
+                <img class="is-rounded" :src="authUser.avatar">
+              </figure>
+              <b-icon icon="menu-down"></b-icon>
+            </button>
+
+            <b-dropdown-item aria-role="listitem" @click="logout">登出</b-dropdown-item>
+          </b-dropdown>
+        </template>
+
+        <nuxt-link class="button is-primary" to="user" v-else>登陆</nuxt-link>
       </div>
     </nav>
     <nuxt/>
@@ -15,9 +29,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  data() {
-    return {}
+  computed: {
+    ...mapState(['authUser'])
+  },
+  methods: {
+    logout() {
+      this.$store.commit('SET_AUTH_USER', null)
+    }
   }
 }
 </script>

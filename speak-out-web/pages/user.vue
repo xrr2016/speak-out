@@ -112,9 +112,9 @@ export default {
         })
         .then(res => {
           const result = res.data
+
           if (result.success) {
             this.SET_AUTH_USER(result.user)
-            this.SET_ACCESS_TOKEN(result.token)
             this.$axios.setToken(result.token, 'Bearer')
             this.$router.push('/')
           } else {

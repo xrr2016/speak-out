@@ -32,7 +32,14 @@ async function pagination(currentPage = 0, pageSize = 10) {
 
 async function create(detail = {}) {
   const post = new Post(detail)
-  return await post.save()
+  await post.save()
+
+  return await Post.findById(post._id)
+    .populate({
+      path: 'author',
+      select: 'username avatar'
+    })
+    .exec()
 }
 
 async function update(id = '', updates = {}) {
@@ -42,8 +49,14 @@ async function update(id = '', updates = {}) {
     return { success: false, message: '资源不存在' }
   }
 
-  await Post.findByIdAndUpdate(id, updates).exec()
-  return await Post.findById(id).exec()
+  return Post.findOneAndUpdate({ _id: id }, updates, { new: true })
+    .exec()
+    .then(result => {
+      return { ...result, success: true }
+    })
+    .catch(err => {
+      return { ...err, success: false }
+    })
 }
 
 async function remove(id = '') {

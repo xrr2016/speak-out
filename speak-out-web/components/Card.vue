@@ -2,21 +2,18 @@
   <div class="box">
     <article class="media">
       <div class="media-left box-left">
-        <figure class="image is-48x48 avatar">
-          <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+        <figure class="image is-32x32 avatar">
+          <img class="is-rounded" :src="post.author.avatar" :alt="post.author.username">
         </figure>
 
-        <button class="button is-white">
+        <button class="button is-white" @click="voteUp">
           <b-icon size="is-small" icon="thumb-up"></b-icon>
           <span>{{ post.vote }}</span>
         </button>
       </div>
       <div class="media-content">
         <div class="content">
-          <small class="is-text username">{{ post.author.username }}</small>
-          <p>
-            <strong>{{ post.title }}</strong>
-          </p>
+          <strong>{{ post.title }}</strong>
           <p>{{ post.content }}</p>
         </div>
       </div>
@@ -30,6 +27,23 @@ export default {
     post: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    voteUp() {
+      const post = this.post
+
+      this.$axios
+        .put(`/api/post/${post._id}`, { vote: post.vote + 1 })
+        .then(result => {
+          post.vote += 1
+        })
+        .catch(err => {
+          this.$toast.open({
+            message: '出错了，请重试',
+            type: 'is-danger'
+          })
+        })
     }
   }
 }

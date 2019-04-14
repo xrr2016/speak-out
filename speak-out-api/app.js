@@ -13,7 +13,10 @@ const postRouter = require('./modules/post/post.controller')
 const app = express()
 const db = mongoose.connection
 
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true })
+mongoose.connect(process.env.DB_URI, {
+  useNewUrlParser: true,
+  useFindAndModify: false
+})
 
 db.on('error', () => console.error('connection error'))
 db.once('open', () => console.log('mongodb connected'))

@@ -12,6 +12,7 @@
           <post-card v-for="(post, index) of posts" :key="index" :post="post"/>
           <button
             class="button is-outlined is-fullwidth"
+            v-if="posts.length >= 10"
             :class="{ 'is-loading': isLoading}"
             :disabled="isLoading || isTotalPost"
             @click="loadMorePost"
@@ -19,11 +20,19 @@
         </template>
       </div>
       <div class="column actions">
-        <a class="button is-primary is-outlined is-fullwidth" @click="showModal">新增</a>
+        <button
+          class="button is-primary is-outlined is-fullwidth"
+          :disabled="authUser === null"
+          @click="showModal"
+        >新增</button>
       </div>
-      <a class="button is-primary is-large float-button" @click="showModal">
+      <button
+        class="button is-primary is-large float-button"
+        :disabled="authUser === null"
+        @click="showModal"
+      >
         <b-icon icon="plus"></b-icon>
-      </a>
+      </button>
     </div>
     <b-modal :active.sync="isShowModal">
       <form class="modal-form" @submit.prevent="createPost">
@@ -68,6 +77,8 @@
 </template>
 
 <script>
+// import io from 'socket.io-client'
+import { mapState } from 'vuex'
 import PostCard from '../components/Card'
 
 export default {
@@ -78,6 +89,14 @@ export default {
   async asyncData({ $axios }) {
     const posts = await $axios.$get('api/post/pagination')
     return { posts }
+  },
+  mounted() {
+    // const socket = io({
+    //   transports: ['websocket']
+    // })
+    // socket.on('connect', () => {
+    //   console.log(socket.id)
+    // })
   },
   data() {
     return {
@@ -94,6 +113,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['authUser']),
     isCanSubmit() {
       return this.postForm.title.length > 0
     }
@@ -104,10 +124,9 @@ export default {
     },
     createPost() {
       const { title, content } = this.postForm
+      const author = this.authUser.id
+
       this.isSubmiting = true
-
-      const author = '5cb1289db63cc9bef0efc05a'
-
       this.$axios
         .post('/api/post', { title, content, author })
         .then(result => {
@@ -162,6 +181,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.posts {
+  padding-left: 0;
+}
 .actions {
   display: none;
   @media screen and (min-width: 769px) {
