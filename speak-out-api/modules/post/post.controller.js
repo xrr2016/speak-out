@@ -1,12 +1,13 @@
 const router = require('express').Router()
 const postService = require('./post.service')
+const auth = require('../../middleware/auth')
 
 router.get('/', async (req, res) => {
   const posts = await postService.findAll()
   return res.status(200).json(posts)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { title, content, author } = req.body
 
   if (!title || !author) {
@@ -32,7 +33,7 @@ router
     const result = await postService.findById(id)
     res.status(200).json(result)
   })
-  .put(async (req, res) => {
+  .put(auth, async (req, res) => {
     const id = req.params.id
     const updates = req.body
 
@@ -48,7 +49,7 @@ router
       return res.status(500).json(result)
     }
   })
-  .delete(async (req, res) => {
+  .delete(auth, async (req, res) => {
     const id = req.params.id
     const result = await postService.remove(id)
 

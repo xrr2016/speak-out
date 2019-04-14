@@ -1,42 +1,45 @@
 <template>
-  <div class="column">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title has-text-grey">
-          {{ title }}
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content has-text-centered">
-          <b-icon
-            :icon="icon"
-            size="is-large"
-            type="is-primary"
-          />
+  <div class="box">
+    <article class="media">
+      <div class="media-left box-left">
+        <figure class="image is-64x64">
+          <img class="avatar" src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+        </figure>
+
+        <button class="button is-white">
+          <b-icon size="is-small" icon="thumb-up"></b-icon>
+          <span>{{ post.vote }}</span>
+        </button>
+      </div>
+      <div class="media-content">
+        <div class="content">
+          <strong>{{ post.title }}</strong>
+          <p>{{ post.content }}</p>
         </div>
       </div>
-      <footer class="card-footer">
-        <div class="card-footer-item">
-          <span>
-            <slot />
-          </span>
-        </div>
-      </footer>
-    </div>
+    </article>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    title: {
-      type: String,
-      required: true
-    },
-    icon: {
-      type: String,
+    post: {
+      type: Object,
       required: true
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.box-left {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  .image {
+    margin-bottom: 0.5rem;
+  }
+}
+</style>
+

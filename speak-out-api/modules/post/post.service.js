@@ -17,9 +17,16 @@ async function findById(id = '') {
 }
 
 async function pagination(currentPage = 0, pageSize = 10) {
-  return await Post.find()
+  const posts = await Post.find()
+    .populate({
+      path: 'author',
+      select: 'username avatar'
+    })
     .skip(currentPage * pageSize)
     .limit(pageSize)
+    .exec()
+
+  return posts
 }
 
 async function create(detail = {}) {

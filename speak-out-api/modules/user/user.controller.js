@@ -1,6 +1,18 @@
 const router = require('express').Router()
 const userService = require('./user.service')
 
+const ONE_DAY = 24 * 60 * 60 * 1000
+const letters = 'abcdefghijklmnopqrstuvwxyz'
+function randomUserName() {
+  let name = ''
+
+  while (name.length < 5) {
+    name += letters[Math.floor(Math.random() * letters.length)]
+  }
+
+  return name
+}
+
 router.get('/', async (req, res) => {
   const users = await userService.findAll()
   return res.status(200).json(users)
@@ -16,6 +28,10 @@ router.post('/login', async (req, res) => {
   const result = await userService.login(username, email, password)
 
   if (result.success) {
+    res.cookie('token', result.token, {
+      expires: new Date(Date.now() + ONE_DAY),
+      httpOnly: true
+    })
     return res.status(200).json(result)
   } else {
     return res.status(400).json(result)
@@ -29,7 +45,13 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ success: false, message: '注册失败' })
   }
 
-  const result = await userService.register(email, password)
+  let username = req.body.username
+
+  if (!username) {
+    username = randomUserName()
+  }
+
+  const result = await userService.register(email, username, password)
 
   if (result.success) {
     return res.status(201).json(result)

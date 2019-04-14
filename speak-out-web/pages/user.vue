@@ -34,6 +34,10 @@
           </b-field>
 
           <b-field>
+            <b-input v-model="signupForm.username" placeholder="输入用户名"></b-input>
+          </b-field>
+
+          <b-field>
             <b-input
               v-model="signupForm.password"
               type="password"
@@ -72,6 +76,7 @@ export default {
       },
       signupForm: {
         email: '',
+        username: '',
         password: ''
       }
     }
@@ -131,7 +136,7 @@ export default {
         })
     },
     handleSignup() {
-      const { email, password } = this.signupForm
+      const { email, username, password } = this.signupForm
 
       if (!email || !password) {
         return
@@ -142,6 +147,7 @@ export default {
       this.$axios
         .post('/api/user/register', {
           email,
+          username,
           password
         })
         .then(res => res.data)
@@ -151,7 +157,6 @@ export default {
               message: '注册成功，请登陆',
               type: 'is-success'
             })
-            // this.SET_AUTH_USER(result.user)
             this.tabIndex = 0
           } else {
             this.$toast.open({

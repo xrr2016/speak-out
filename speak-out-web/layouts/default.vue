@@ -1,6 +1,10 @@
 <template>
   <main>
-    <nav class="navbar header has-shadow is-primary" role="navigation" aria-label="main navigation">
+    <nav
+      class="navbar header is-fixed-top has-shadow is-primary"
+      role="navigation"
+      aria-label="main navigation"
+    >
       <div class="main-content">
         <nuxt-link class="logo button is-primary" to="/">speak out</nuxt-link>
         <nuxt-link class="button is-primary" to="user">登陆</nuxt-link>

@@ -5,27 +5,36 @@ const mongoose = require('mongoose')
 const TWO_HOURS = '2h'
 const JWT_SECRET = process.env.JWT_SECRET
 
-const userSchema = mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true
+const userSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    username: {
+      type: String,
+      unique: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    level: {
+      type: Number,
+      default: 0
+    }
   },
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  level: {
-    type: Number,
-    default: 0
+  {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updateed_at' },
+    autoIndex: false
   }
-})
+)
 
 userSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.password)

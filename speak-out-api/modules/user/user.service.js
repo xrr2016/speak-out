@@ -54,7 +54,7 @@ async function remove(id = '') {
   }
 }
 
-async function register(email = '', password = '') {
+async function register(email = '', username = '', password = '') {
   const user = await User.findOne({ email }).exec()
 
   if (user !== null) {
@@ -63,9 +63,8 @@ async function register(email = '', password = '') {
 
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
-  const username = `speak-out-${Date.now()}`
-
-  const result = await create({ email, username, password: hash })
+  const avatar = `${process.env.USER_AVATAR_URL}${username.slice(0, 1)}`
+  const result = await create({ email, username, avatar, password: hash })
 
   return {
     success: true,
@@ -74,6 +73,7 @@ async function register(email = '', password = '') {
       level: result.level,
       id: result._id,
       email: result.email,
+      avatar: result.avatar,
       username: result.username
     }
   }
@@ -106,6 +106,7 @@ async function login(username = '', email = '', password = '') {
       id: user._id,
       level: user.level,
       email: user.email,
+      avatar: user.avatar,
       username: user.username
     }
   }

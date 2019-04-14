@@ -2,13 +2,14 @@
   <section class="section">
     <div class="main-content columns">
       <div class="column is-three-quarters posts">
-        <ul>
-          <li v-for="post of posts" :key="post._id">{{ post.title }}</li>
-        </ul>
+        <post-card v-for="post of posts" :key="post._id" :post="post"/>
       </div>
       <div class="column actions">
         <a class="button is-primary is-outlined is-fullwidth" @click="showModal">新增</a>
       </div>
+      <a class="button is-primary is-large float-button" @click="showModal">
+        <b-icon icon="plus"></b-icon>
+      </a>
     </div>
     <b-modal :active.sync="isShowModal">
       <form class="modal-form" @submit.prevent="createPost">
@@ -101,9 +102,10 @@ export default {
           })
         })
         .catch(err => {
-          console.log('err :', err)
+          const data = err.response.data
+
           this.$toast.open({
-            message: '发布失败',
+            message: '发布失败 ' + data.message,
             type: 'is-danger'
           })
         })
@@ -121,9 +123,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.actions {
+  display: none;
+  @media screen and (min-width: 769px) {
+    display: block;
+  }
+}
+.float-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  border-radius: 50%;
+  display: none;
+  @media screen and (max-width: 769px) {
+    display: block;
+  }
+}
 .modal-form {
   display: flex;
   justify-content: center;
+  width: 80%;
+  max-width: 640px;
+  margin: 0 auto;
   .modal-card-foot {
     justify-content: flex-end;
   }
