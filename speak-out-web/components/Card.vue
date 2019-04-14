@@ -2,8 +2,8 @@
   <div class="box">
     <article class="media">
       <div class="media-left box-left">
-        <figure class="image is-64x64">
-          <img class="avatar" src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
+        <figure class="image is-48x48 avatar">
+          <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
         </figure>
 
         <button class="button is-white">
@@ -13,7 +13,10 @@
       </div>
       <div class="media-content">
         <div class="content">
-          <strong>{{ post.title }}</strong>
+          <small class="is-text username">{{ post.author.username }}</small>
+          <p>
+            <strong>{{ post.title }}</strong>
+          </p>
           <p>{{ post.content }}</p>
         </div>
       </div>
@@ -33,12 +36,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box:not(:last-child) {
+  margin-bottom: 0.8rem;
+}
 .box-left {
   display: flex;
   flex-flow: column wrap;
   align-items: center;
-  .image {
+  .avatar {
     margin-bottom: 0.5rem;
+  }
+  .username {
+    max-width: 4em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 </style>

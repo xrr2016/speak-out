@@ -23,7 +23,7 @@ const postSchema = Schema(
     }
   },
   {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updateed_at' },
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     autoIndex: false
   }
 )

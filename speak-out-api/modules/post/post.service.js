@@ -24,6 +24,7 @@ async function pagination(currentPage = 0, pageSize = 10) {
     })
     .skip(currentPage * pageSize)
     .limit(pageSize)
+    .sort({ created_at: 'desc' })
     .exec()
 
   return posts

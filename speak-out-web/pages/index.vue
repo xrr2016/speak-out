@@ -2,7 +2,21 @@
   <section class="section">
     <div class="main-content columns">
       <div class="column is-three-quarters posts">
-        <post-card v-for="post of posts" :key="post._id" :post="post"/>
+        <div class="box" v-if="posts.length <= 0">
+          <div class="media-content">
+            <div class="content">什么都没有</div>
+          </div>
+        </div>
+
+        <template v-else>
+          <post-card v-for="(post, index) of posts" :key="index" :post="post"/>
+          <button
+            class="button is-outlined is-fullwidth"
+            :class="{ 'is-loading': isLoading}"
+            :disabled="isLoading || isTotalPost"
+            @click="loadMorePost"
+          >{{ isTotalPost ? '没有更多了' : '加载更多'}}</button>
+        </template>
       </div>
       <div class="column actions">
         <a class="button is-primary is-outlined is-fullwidth" @click="showModal">新增</a>
@@ -67,7 +81,10 @@ export default {
   },
   data() {
     return {
+      posts: [],
       currentPage: 0,
+      isTotalPost: false,
+      isLoading: false,
       isShowModal: false,
       isSubmiting: false,
       postForm: {
@@ -117,6 +134,28 @@ export default {
             content: ''
           }
         })
+    },
+    async loadMorePost() {
+      if (this.isTotalPost) {
+        return
+      }
+
+      this.isLoading = true
+      const posts = await this.$axios.$get(
+        'api/post/pagination?page=' + this.currentPage
+      )
+      this.isLoading = false
+
+      if (!posts.length) {
+        this.isTotalPost = true
+        return
+      }
+
+      posts.forEach(post => {
+        this.posts.push(post)
+      })
+
+      this.currentPage++
     }
   }
 }
